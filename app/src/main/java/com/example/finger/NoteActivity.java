@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Key;
 import java.security.KeyStore;
 import java.util.Base64;
 
@@ -18,16 +19,21 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.IvParameterSpec;
+
 
 public class NoteActivity extends AppCompatActivity {
     String notepad;
+
     Button savebutton, encbutton, decbutton;
     EditText tekst;
     KeyStore keyStore;
     String secret;
-
+    private static final String initVector = "encryptionIntVec";
+    IvParameterSpec iv = new IvParameterSpec(initVector.getBytes());
     private byte[] enc;
     private String Key_NAME = "keyname";
+    int ifen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,7 @@ public class NoteActivity extends AppCompatActivity {
         encbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String text = tekst.getText().toString();
                 try {
                     enc = MainActivity.cipher.doFinal(text.getBytes("UTF-8"));
@@ -67,17 +74,17 @@ public class NoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try{
-                    String text = tekst.getText().toString();
 
-                    keyStore = KeyStore.getInstance("AndroidKeyStore");
-                    keyStore.load(null);
-                    SecretKey key = (SecretKey) keyStore.getKey(Key_NAME, null);
-                    final GCMParameterSpec spec = new GCMParameterSpec(128,MainActivity.iv);
-                    MainActivity.cipher.init(Cipher.DECRYPT_MODE, key,spec);
-                    final byte[] decoded = MainActivity.cipher.doFinal(Base64.getDecoder().decode(text));
-                    final String decstring = new String(decoded, "UTF-8");
+                        String text = tekst.getText().toString();
+                        keyStore = KeyStore.getInstance("AndroidKeyStore");
+                        keyStore.load(null);
+                        SecretKey Secretkey = (SecretKey) keyStore.getKey(Key_NAME, null);
+                        MainActivity.cipher.init(Cipher.DECRYPT_MODE, Secretkey, iv);
+                        final byte[] decoded = MainActivity.cipher.doFinal(Base64.getDecoder().decode(text));
+                        final String decstring = new String(decoded, "UTF-8");
 
-                    tekst.setText(decstring);
+                        tekst.setText(decstring);
+
                 }catch (Exception e){
                     Log.e("KeyStore", e.getMessage());
                     return;
