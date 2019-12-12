@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                     cipher.init(Cipher.ENCRYPT_MODE, Secretkey, iv);
                 }
                 else {
-
                     keyGenerator.init(new KeyGenParameterSpec.Builder(Key_NAME, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
                             .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
@@ -103,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Generating keys", e.getMessage());
                 return;
             }
-
 
             FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
             CancellationSignal cancellationSignal = new CancellationSignal();

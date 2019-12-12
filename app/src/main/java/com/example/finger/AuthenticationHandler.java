@@ -12,11 +12,7 @@ public class AuthenticationHandler extends FingerprintManager.AuthenticationCall
 
 
     public AuthenticationHandler(Context mContex){
-
         this.context = mContex;
-
-
-
     }
 
     @Override
@@ -29,10 +25,7 @@ public class AuthenticationHandler extends FingerprintManager.AuthenticationCall
     public void onAuthenticationHelp(int helpCode, CharSequence helpString) {
         super.onAuthenticationHelp(helpCode, helpString);
         Toast.makeText(context, "Auth help: " + helpString, Toast.LENGTH_SHORT).show();
-
-
     }
-
 
     @Override
     public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
@@ -40,22 +33,11 @@ public class AuthenticationHandler extends FingerprintManager.AuthenticationCall
         Toast.makeText(context, "Auth Succeeded: " , Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(context, NoteActivity.class);
         context.startActivity(intent);
-
-
-
-
-
-
-
     }
-
-
 
     @Override
     public void onAuthenticationFailed() {
         super.onAuthenticationFailed();
         Toast.makeText(context, "Auth Failed: " , Toast.LENGTH_SHORT).show();
     }
-
-
 }

@@ -23,8 +23,8 @@ import javax.crypto.spec.IvParameterSpec;
 
 
 public class NoteActivity extends AppCompatActivity {
-    String notepad;
 
+    String notepad;
     Button savebutton, encbutton, decbutton;
     EditText tekst;
     KeyStore keyStore;
@@ -33,7 +33,7 @@ public class NoteActivity extends AppCompatActivity {
     IvParameterSpec iv = new IvParameterSpec(initVector.getBytes());
     private byte[] enc;
     private String Key_NAME = "keyname";
-    int ifen;
+    String decstring;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,24 +74,20 @@ public class NoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try{
-
                         String text = tekst.getText().toString();
                         keyStore = KeyStore.getInstance("AndroidKeyStore");
                         keyStore.load(null);
                         SecretKey Secretkey = (SecretKey) keyStore.getKey(Key_NAME, null);
                         MainActivity.cipher.init(Cipher.DECRYPT_MODE, Secretkey, iv);
                         final byte[] decoded = MainActivity.cipher.doFinal(Base64.getDecoder().decode(text));
-                        final String decstring = new String(decoded, "UTF-8");
-
-                        tekst.setText(decstring);
-
+                        decstring = new String(decoded, "UTF-8");
                 }catch (Exception e){
                     Log.e("KeyStore", e.getMessage());
                     return;
 
                 }
 
-
+                tekst.setText(decstring);
             }
 
         });
